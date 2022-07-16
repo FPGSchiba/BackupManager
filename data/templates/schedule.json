@@ -1,0 +1,9 @@
+{
+  "schedule": {
+    "every": 1234,
+    "interval": "second/minute/hour/day/week"
+  },
+  "job-config": {
+    "templates": "job_config_*.json"
+  }
+}

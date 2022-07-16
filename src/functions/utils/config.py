@@ -3,7 +3,7 @@ import os
 
 
 def get_data_dir():
-    return os.path.join(f"{os.path.sep}".join(__file__.split(os.path.sep)[0:-3]), "data")
+    return os.path.join(f"{os.path.sep}".join(__file__.split(os.path.sep)[0:-4]), "data")
 
 
 STR_DATA_DIR = "{data-dir}"

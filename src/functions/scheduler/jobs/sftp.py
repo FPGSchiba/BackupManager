@@ -1,14 +1,33 @@
 import hashlib
 import json
 import os
+import shutil
 import tarfile
+from datetime import datetime
 
 import pysftp
 
-from src.utils.config import Config
-from src.utils.storage import get_backup_name, remove_old_folder
 
-CONF = Config()
+def get_time_string():
+    return datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+
+
+def get_backup_name():
+    timestamp = datetime.now().strftime("%d%m%y-%H")
+    return f"{timestamp}.tar.gz"
+
+
+def remove_old_folder(folder: str):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+    os.rmdir(folder)
 
 
 def compress_backup(folder: str, download_folder):
@@ -75,10 +94,10 @@ def get_all_files(folder: str, connection: pysftp.Connection):
     return files
 
 
-def start_download(job_config: dict):
+def start_download(job_config: dict, CONF):
     if job_config['type'] != "sftp":
         return
-    print(f'Running Backup Job: {job_config["name"]}')
+    print(f'[{get_time_string()}] Running Backup Job: {job_config["name"]}')
     folder = CONF.jobs.directory.replace("{job-name}", job_config['name'])
     if not os.path.isdir(folder):
         os.mkdir(folder)
@@ -100,6 +119,7 @@ def start_download(job_config: dict):
         download_folder = os.path.join(folder, "downloads")
         download_files(download_folder, files, connection)
         compress_backup(folder, download_folder)
+    print(f'[{get_time_string()}] Finished Backup Job: {job_config["name"]}')
 
 
 if __name__ == '__main__':

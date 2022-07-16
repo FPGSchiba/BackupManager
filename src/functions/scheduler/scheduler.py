@@ -7,7 +7,7 @@ import time
 import schedule
 import threading
 
-from src.utils.config import Config
+from src.functions.utils.config import Config
 
 CONF = Config()
 
@@ -57,15 +57,15 @@ class Scheduler(threading.Thread):
             job_interval = str(config["schedule"]["interval"])
             job_every = int(config["schedule"]["every"])
             if job_interval == "second":
-                schedule.every(job_every).seconds.do(func, job_config=job_config)
+                schedule.every(job_every).seconds.do(func, job_config=job_config, CONF=CONF)
             elif job_interval == "minute":
-                schedule.every(job_every).minutes.do(func, job_config=job_config)
+                schedule.every(job_every).minutes.do(func, job_config=job_config, CONF=CONF)
             elif job_interval == "hour":
-                schedule.every(job_every).hours.do(func, job_config=job_config)
+                schedule.every(job_every).hours.do(func, job_config=job_config, CONF=CONF)
             elif job_interval == "day":
-                schedule.every(job_every).days.do(func, job_config=job_config)
+                schedule.every(job_every).days.do(func, job_config=job_config, CONF=CONF)
             elif job_interval == "week":
-                schedule.every(job_every).weeks.do(func, job_config=job_config)
+                schedule.every(job_every).weeks.do(func, job_config=job_config, CONF=CONF)
             else:
                 raise KeyError(f"Job config: {job_config['name']} schedule is not well defined.")
 

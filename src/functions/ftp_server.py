@@ -2,7 +2,7 @@ from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 
-from src.utils.config import Config
+from src.functions.utils.config import Config
 
 CONF = Config()
 

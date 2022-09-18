@@ -26,9 +26,16 @@ class FTP:
         self.directory = str(data["directory"]).replace(STR_DATA_DIR, DATA_DIR)
 
 
+class API:
+    def __init__(self, data):
+        self.host = str(data['host'])
+        self.port = int(data['port'])
+
+
 class Config:
     def __init__(self):
         with open(CONFIG_FILE, "r+", encoding="UTF-8") as config_file:
             data = yaml.load(config_file, yaml.Loader)
         self.jobs = Jobs(data["jobs"])
         self.ftp = FTP(data["ftp"])
+        self.api = API(data['api'])

@@ -116,13 +116,15 @@ def start_download(job_config: dict, CONF):
         for remote_folder in folders:
             files += get_all_files(remote_folder, connection)
             connection.chdir(remote_root)
-        download_folder = os.path.join(folder, "downloads")
+        download_folder = os.path.join(folder, f"downloads-{datetime.now().isoformat()}")
         download_files(download_folder, files, connection)
         compress_backup(folder, download_folder)
     print(f'[{get_time_string()}] Finished Backup Job: {job_config["name"]}')
 
 
 if __name__ == '__main__':
+    from src.functions.utils.config import Config
+    CONF = Config()
     start_download({
         "type": "sftp",
         "name": "minas-tirith",
@@ -130,4 +132,4 @@ if __name__ == '__main__':
         "port": 5657,
         "username": "craftzockerlp@gmail.com|2c1ddcb3",
         "password": "Password1"
-    })
+    }, CONF)
